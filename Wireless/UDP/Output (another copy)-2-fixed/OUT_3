@@ -1,0 +1,22 @@
+
+# of Nodes:                   20 
+# of flows:                   10 
+Packet rate:                  100 
+coverArea:                        100 
+
+
+
+Throughput:                   14908.30000 
+AverageDelay:                 .17247 
+Sent Packets:                 29900.00000 
+Received Packets:             3493.90000 
+Dropped Packets:              26170.50000 
+PacketDeliveryRatio:          11.68600 
+PacketDropRatio:              87.52700 
+Total time:                   29.99733 
+Total energy consumption:     1520.03850 
+Average Energy per bit:       .00752 
+Average Energy per byte:      .06036 
+Average energy per packet:    .96622 
+total_retransmit:             0 
+energy_efficiency(nj/bit):    7548889.000000000 

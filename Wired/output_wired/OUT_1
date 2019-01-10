@@ -1,0 +1,16 @@
+
+# of Nodes:                   20 
+# of flows:                   10 
+Packet size:                  100 
+
+
+
+Throughput:                   23155566.78000 
+AverageDelay:                 .04587 
+Sent Packets:                 25214.00000 
+Received Packets:             25048.00000 
+Dropped Packets:              37.00000 
+PacketDeliveryRatio:          99.34000 
+PacketDropRatio:              .15000 
+Total time:                   8.99997 
+Total Delay: 					1148.88069 
