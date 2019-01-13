@@ -272,7 +272,7 @@ for {set i 0} {$i < $num_flow} {incr i} {
 	$udp_($i) set class_ $i
 	$udp_($i) set fid_ $i
 
-	$udp_($i) set windowOption_ 38
+	# $udp_($i) set windowOption_ 38
 	$udp_($i) set packetSize_ 40
 	$udp_($i) attach $tracefd
 

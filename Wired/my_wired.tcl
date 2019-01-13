@@ -13,6 +13,7 @@ $ns trace-all $tracefile
 set namfile [open $nm w]
 $ns namtrace-all $namfile
 
+set file1 [open qm.out w]
 
 #taking inputs from shell 
 
@@ -51,13 +52,27 @@ for {set i 0} {$i < $num_node} {incr i} {
 
     if {$val != 9} {
         $ns duplex-link $node_($i) $node_($right) 5Mb 2ms DropTail
+
+        set qmon [$ns monitor-queue $node_($i) $node_($right) $file1 0.1]
+        [$ns link $node_($i) $node_($right)] queue-sample-timeout
     }
 
     if {$down < [expr $num_node-1]} {
         $ns duplex-link $node_($i) $node_($down) 5Mb 2ms DropTail
+
+        set qmon [$ns monitor-queue $node_($i) $node_($down) $file1 0.1]
+        [$ns link $node_($i) $node_($down)] queue-sample-timeout
+
     }
+
+    
 }
 
+###
+# set qmon [$ns monitor-queue $node_(2) $node_(3) $file1 0.1]
+# [$ns link $node_(2) $node_(3)] queue-sample-timeout
+
+###
 
 #Create flows and associate them with nodes
 

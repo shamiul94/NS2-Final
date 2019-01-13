@@ -3,12 +3,14 @@
 outputDirectory="output_wired/"
 rm -rf $outputDirectory
 rm -rf Output/
+rm -rf QueueMonitor/
+mkdir -p QueueMonitor/
 mkdir -p $outputDirectory
 
 tclFile="my_wired.tcl"
 
 
-iteration_float=5.0;
+iteration_float=1.0;
 under="_";
 
 outFile="$outputDirectory""OUT"
@@ -68,6 +70,10 @@ do
 
 		ns $tclFile $nNodes $nFlows $pcktRate
 		echo "SIMULATION COMPLETE. BUILDING STAT..."
+
+		qf="QueueMonitor/qMonitor_round-$round-iteration-$iteration"
+		awk -f queue_awk.awk qm.out > $qf
+
 
 		flnm="$outputDirectory""tem""$round"
 		awk -f wired_awk.awk wired.tr > $tempFile
