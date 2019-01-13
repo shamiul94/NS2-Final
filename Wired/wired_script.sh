@@ -38,7 +38,7 @@ echo '1. # of Nodes'
 echo '2. # of flows'
 echo '3. Packet rate'
 
-read param
+# read param
 
 echo 'Please enter the # of iteration'
 read nIter

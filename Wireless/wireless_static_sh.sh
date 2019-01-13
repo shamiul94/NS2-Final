@@ -17,7 +17,7 @@ tclFile="my-wireless-static.tcl"
 nNodesInit=20
 nFlowsInit=10
 pcktRateInit=100
-coverAreaInit=100
+coverAreaInit=300
 
 nNodes=$nNodesInit
 nFlows=$nFlowsInit
@@ -37,7 +37,7 @@ echo '2. # of flows'
 echo '3. Packet rate'
 echo '4. Coverage Area'
 
-read param
+# read param
 
 echo 'Please enter the # of datasets'
 read nDataSet

@@ -672,7 +672,7 @@ double TcpAgent::rtt_timeout()
 }
 
 
-// Simple Moving Average SMA instead of EMA updates based on last 5 dataset only
+// Simple Moving Average SMA instead of EMA updates based on last 10 dataset only
 void TcpAgent::rtt_update_modified(double tao)
 {
     //as before
@@ -738,6 +738,8 @@ void TcpAgent::rtt_update_modified(double tao)
             }
         }
 
+        /**********Modification Ends Here**************/
+
         curDev = int(ceil((double)curDev / l));
         if (curAvg != (t_srtt_ >> T_SRTT_BITS))
             t_srtt_ = (curAvg << T_SRTT_BITS);
@@ -745,7 +747,7 @@ void TcpAgent::rtt_update_modified(double tao)
             t_rttvar_ = (curDev << T_RTTVAR_BITS);
 
 
-         /**********Modification Ends Here**************/
+       
 
 
         // as before

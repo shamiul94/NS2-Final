@@ -708,7 +708,7 @@ void AODV::recvRequest(Packet *p)
   num = (float)rand();
   random_value = (num / RAND_MAX) / 20.0;
   printf("%f", random_value);
-  printf(":%d:", rt->rt_hops);
+  printf(":%d:", rt->rt_hops); 
   drop_factor = (1 / (rt->rt_hops + 1.0)) * 1000;
   printf("Drop Factor:%f \n", drop_factor);
   if (random_value < drop_factor)

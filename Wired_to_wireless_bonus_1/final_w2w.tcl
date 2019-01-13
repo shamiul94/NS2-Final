@@ -78,7 +78,7 @@ set ns_   [new Simulator]
 
   set temp {1.0.0 1.0.1 1.0.2 1.0.3 1.0.4 1.0.5 1.0.6 1.0.7 1.0.8 1.0.9 1.0.10 1.0.11 1.0.12 1.0.13 1.0.14 1.0.15 1.0.16 1.0.17 1.0.18 1.0.19}   
   set BS(0) [$ns_ node [lindex $temp 0]]
-  set BS(1) [$ns_ node 2.0.0]
+  set BS(1) [$ns_ node 2.0.0] 
   $BS(0) random-motion 0 
   $BS(1) random-motion 0
 
