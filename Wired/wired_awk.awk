@@ -13,8 +13,13 @@ BEGIN {
 	rEndTime = 0.0;
 	nReceivedBytes = 0;
 
+
 	for(i = 0; i < max_pckt; i++){
 		send_flag[i] = 0;
+	}
+
+	for (i=0; i<max_node; i++) {
+		node_thr[i] = 0;		
 	}
 
 	# printf("Starting Analysis\n");
@@ -73,6 +78,7 @@ BEGIN {
 			rReceivedTime[ pkt_id ] = rTime ;
 			rDelay[pkt_id] = rReceivedTime[ pkt_id] - rSentTime[ pkt_id ];
 			rTotalDelay += rDelay[pkt_id]; 
+			node_thr[potential_source] += pkt_size;
 		}
 		if(strEvent == "d" && pkt_size == "1040"){
 			# printf("Packet Dropped\n");
@@ -96,6 +102,13 @@ END {
 	printf( "%15.2f\n%15.5f\n%15.2f\n%15.2f\n", rThroughput, rAverageDelay, nSentPackets, nReceivedPackets);
 	printf( "%15.2f\n%10.2f\n%10.2f\n%10.5f\n", nDropPackets, rPacketDeliveryRatio, rPacketDropRatio,rTime);
 	printf("%15.5f\n",rTotalDelay);
+
+	for (i=0; i<max_node; i++) {
+		if (node_thr[i] > 0) {
+			printf("%d %f\n", i, node_thr[i]*8 / rTime );
+		}
+	}
+	# printf("\n"); 
 
 }
 

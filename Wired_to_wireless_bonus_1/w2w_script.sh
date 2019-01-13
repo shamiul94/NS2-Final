@@ -9,7 +9,7 @@ mkdir -p $outputDirectory
 tclFile="final_w2w.tcl"
 
 
-iteration_float=1.0;
+iteration_float=5.0;
 under="_";
 
 outFile="$outputDirectory""OUT"

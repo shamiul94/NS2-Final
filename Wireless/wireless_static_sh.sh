@@ -1,16 +1,17 @@
 
 #INPUT: output file AND number of iterations
 
-outputDirectory="out/"
+outputDirectory="Output_Wireless-802_11_Static/"
 rm -rf $outputDirectory
 rm -rf Output/
 mkdir -p $outputDirectory
-iteration_float=10.0;
+iteration_float=5.0;
 under="_";
 
 outFile="$outputDirectory""OUT"
 tempFile="$outputDirectory""TEMPFILE"
 graphData="$outputDirectory""GRAPH"
+nodeThrData="$outputDirectory""NodeThr"
 tclFile="my-wireless-static.tcl"
 
 nNodesInit=20
@@ -45,6 +46,12 @@ round=1
 
 while [ $round -le $nDataSet ]
 do
+
+	for (( count=0; count<=$nNodes; count++ ))
+	do  
+		currNodeThr["$count"]=0
+	done
+
 	echo "total iteration: $iteration"
 	###############################START A ROUND
 
@@ -70,7 +77,7 @@ do
 		# ======================================================================
 		# UPDATING THE VALUES IN EACH ITERATION
 		# ======================================================================
-		l=0 
+		
 		while read val
 		do
 			
@@ -118,12 +125,22 @@ do
 			elif [ "$l" == "14" ]; then
 				energy_efficiency=$(echo "scale=9; $energy_efficiency+$val/$iteration_float" | bc)
 				#		echo -ne "energy_efficiency: "
+			else 
+				nodeIdxVal="$(echo "$val" | cut -d' ' -f1)"
+				# echo "val == $val"
+  				thisNodeThrVal="$(echo "$val" | cut -d' ' -f2)" 
+
+				
+				currNodeThr["$nodeIdxVal"]=$(echo "scale=5; ${currNodeThr[$nodeIdxVal]}+$thisNodeThrVal/$iteration_float" | bc)
+				echo "node index = $nodeIdxVal, ${currNodeThr[$nodeIdxVal]}"
+			
 			fi
 
 			#echo "$val"
 		done < $tempFile
 
 		i=$(($i+1))
+		l=0 
 	done
 
 	# don't know what this is; found in sir's code
@@ -170,6 +187,41 @@ do
 
 ######################
 	round=$(($round+1))
+
+
+	if [ "$param" == "1" ]; then
+		xax="No of nodes"
+	elif [ "$param" == "2" ]; then
+		xax="No of flows"
+	elif [ "$param" == "3" ]; then
+		xax="Packet Rate"
+	elif [ "$param" == "4" ]; then
+		xax="coverArea ( Tx_Range )"
+	fi
+
+	for (( count=0; count<=$nNodes; count++ ))
+	do  
+		echo "$count ${currNodeThr["$count"]}" >> $nodeThrData
+	done
+
+	arr4[0]=""
+	arr4[1]=""
+	arr4[2]="Per-Node-Throughput"
+
+	arr5[0]=""
+	arr5[1]=""
+	arr5[2]="Per-Node-Throughput ( bit/second )"
+
+	ii=2
+	while [ $ii -ge 2 ]
+	do
+		tem=$(($round-1))
+		gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr4[$ii]}VS$xax-round$under$tem.png';set title 'Wireless-802_11_Static : ${arr5[$ii]} vs $xax - Round - $tem'; set xlabel '$xax'; set ylabel '${arr5[$ii]}'; plot '$nodeThrData' using 1:$ii with lines"
+		ii=$(($ii-1))
+	done
+
+	cp $nodeThrData t.txt
+	rm -rf $nodeThrData
 
 	# ==========================================================================
 	# GRAPH GENERATION
@@ -224,7 +276,10 @@ arr2[7]="Energy per byte ( J )"
 i=7
 while [ $i -ge 2 ]
 do
-	gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr[$i]}VS$param.png'; set title '802.11 : ${arr[i]} vs $param'; set xlabel '$param'; set ylabel '${arr2[i]}'; plot 'out/GRAPH' using 1:$i with lines"
+	gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr[$i]}VS$param.png'; set title 'Wireless_802.11(Static) (After modification): ${arr[$i]} vs $param'; set xlabel '$param'; set ylabel '${arr2[i]}'; plot '$graphData' using 1:$i with lines"
+
+	# gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr[$i]}VS$param.png'; set title 'Wireless_802.11(Static) : ${arr[$i]} vs $param'; set xlabel '$param'; set ylabel '${arr2[i]}'; plot '$graphData' using 1:$i with lines"
+
 	i=$(($i-1))
 done
 
@@ -232,5 +287,5 @@ done
 # rm TOPO.txt
 # rm TRACE.tr
 
-mv $outputDirectory "Output"
+# mv $outputDirectory "Output"
 # code Output/GRAPH

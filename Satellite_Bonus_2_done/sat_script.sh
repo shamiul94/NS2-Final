@@ -1,7 +1,7 @@
 
 #INPUT: output file AND number of iterations
 
-outputDirectory="output_wired/"
+outputDirectory="output_satellite/"
 rm -rf $outputDirectory
 rm -rf Output/
 mkdir -p $outputDirectory
@@ -187,7 +187,7 @@ arr2[5]="Packet Drop Ratio ( % )"
 i=5
 while [ $i -ge 2 ]
 do
-	gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr[$i]}VS$param.png';set title 'Wired : ${arr[$i]} vs $param'; set xlabel '$param'; set ylabel '${arr2[$i]}'; plot 'output_wired/GRAPH' using 1:$i with lines"
+	gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr[$i]}VS$param.png';set title 'Satellite : ${arr[$i]} vs $param'; set xlabel '$param'; set ylabel '${arr2[$i]}'; plot 'output_wired/GRAPH' using 1:$i with lines"
 	i=$(($i-1))
 done
 

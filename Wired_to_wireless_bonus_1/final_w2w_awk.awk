@@ -15,9 +15,9 @@ BEGIN {
 
 	temp = 0;
 
-	for (i=0; i<max_node; i++) {
-		node_thr[i] = 0;		
-	}
+	# for (i=0; i<max_node; i++) {
+	# 	node_thr[i] = 0;		
+	# }
 
 	total_retransmit = 0;
 	for (i=0; i<max_pckt; i++) {

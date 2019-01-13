@@ -1,4 +1,3 @@
-
 #INPUT: output file AND number of iterations
 
 outputDirectory="output_wired/"
@@ -9,12 +8,13 @@ mkdir -p $outputDirectory
 tclFile="my_wired.tcl"
 
 
-iteration_float=1.0;
+iteration_float=5.0;
 under="_";
 
 outFile="$outputDirectory""OUT"
 tempFile="$outputDirectory""TEMPFILE"
 graphData="$outputDirectory""GRAPH"
+nodeThrData="$outputDirectory""NodeThr"
 
 
 nNodesInit=20
@@ -45,6 +45,12 @@ round=1
 
 while [ $round -le $nIter ]
 do
+
+	for (( count=0; count<=$nNodes; count++ ))
+	do  
+		currNodeThr["$count"]=0
+	done
+
 	###############################START A ROUND
 
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -102,6 +108,14 @@ do
 				#		echo -ne "time: "
 			elif [ "$l" == "9" ]; then
 				rTotalDelay=$(echo "scale=5; $rTotalDelay+$val/$iteration_float" | bc)
+			else 
+				nodeIdxVal="$(echo "$val" | cut -d' ' -f1)"
+				# echo "val == $val"
+  				thisNodeThrVal="$(echo "$val" | cut -d' ' -f2)" 
+
+				
+				currNodeThr["$nodeIdxVal"]=$(echo "scale=5; ${currNodeThr[$nodeIdxVal]}+$thisNodeThrVal/$iteration_float" | bc)
+				echo "node index = $nodeIdxVal, ${currNodeThr[$nodeIdxVal]}"
 			fi
 
 			# echo "val: $val"
@@ -166,6 +180,42 @@ do
 #
 	########Plotting Graph
 
+	
+	if [ "$param" == "1" ]; then
+		xax="No of nodes"
+	elif [ "$param" == "2" ]; then
+		xax="No of flows"
+	elif [ "$param" == "3" ]; then
+		xax="Packet Rate"
+	fi
+
+
+	for (( count=0; count<=$nNodes; count++ ))
+	do  
+		echo "$count ${currNodeThr["$count"]}" >> $nodeThrData
+	done
+
+	arr4[0]=""
+	arr4[1]=""
+	arr4[2]="Per-Node-Throughput-Round-"
+
+	arr5[0]=""
+	arr5[1]=""
+	arr5[2]="Per-Node-Throughput ( bit/second )"
+
+
+	ii=2
+	while [ $ii -ge 2 ]
+	do
+		tem=$(($round-1))
+		gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr4[$ii]}VS$xax-round$under$tem.png';set title 'Wired (After Modification) : ${arr5[$ii]} vs $xax - Round - $tem'; set xlabel '$xax'; set ylabel '${arr5[$ii]}'; plot '$nodeThrData' using 1:$ii with lines"
+		ii=$(($ii-1))
+	done
+
+	# cp $nodeThrData t.txt
+	rm -rf $nodeThrData
+
+
 	if [ "$param" == "1" ]; then
 		echo -ne "$nNodes " >> $graphData
 		nNodes=$(($nNodesInit*$round))
@@ -178,8 +228,9 @@ do
 	fi
 
 	# echo "throughput: $thr delay: $del deliver_rat: $del_ratio drop_rat: $dr_ratio" >> $graphData
-
 	echo "$thr $del $del_ratio $dr_ratio" >> $graphData	
+
+
 	#####################END A ROUND
 done
 
@@ -208,7 +259,10 @@ arr2[5]="Packet Drop Ratio ( % )"
 i=5
 while [ $i -ge 2 ]
 do
-	gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr[$i]}VS$param.png';set title 'Wired : ${arr[i]} vs $param'; set xlabel '$param'; set ylabel '${arr2[i]}'; plot 'output_wired/GRAPH' using 1:$i with lines"
+	gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr[$i]}VS$param.png';set title 'Wired (After Modification) : ${arr[$i]} vs $param'; set xlabel '$param'; set ylabel '${arr2[i]}'; plot 'output_wired/GRAPH' using 1:$i with lines"
+
+	# gnuplot -persist -e "set terminal png size 700,500; set output '$outputDirectory${arr[$i]}VS$param.png';set title 'Wired : ${arr[$i]} vs $param'; set xlabel '$param'; set ylabel '${arr2[i]}'; plot 'output_wired/GRAPH' using 1:$i with lines"
+
 	i=$(($i-1))
 done
 

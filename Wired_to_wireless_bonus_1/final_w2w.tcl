@@ -142,7 +142,8 @@ for {set i 0} {$i < 20} {incr i} {
     set ftp($i) [new Application/FTP]
 
     $ftp($i) attach-agent $tcp($i)
-    $ns_ at [expr 2 + $i * 0.1] "$ftp($i) start"
+    # $ns_ at [expr 2 + $i * 0.1] "$ftp($i) start"
+    $ns_ at 2 "$ftp($i) start"
 }
 
   
