@@ -13,7 +13,15 @@ For bonus I completed-
       4. Per node throughput calculation. 
 ```
 
+Modifications in CPP files I made - 
+```
+      1. TCP congestion control (tcp.cc)
+      2. Random AODV Routing protocol (aodv.cc)
+      3. RTT calculation mechanism (tcp.cc)
+```
 For routing protocol modification, I used a paper on RAODV (Random AODV). 
+
 For tcp congestion window modification and rtt calculation, I used simple intuitions. 
-All modified files and my whole ns installation in home folder is given here. Understand it carefully before implementing it. 
+
+All modified files and my whole ns installation folder in home directory is given here. Understand it carefully before implementing it. 
 Necessary books and papers are also given here. 
