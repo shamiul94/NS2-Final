@@ -1,5 +1,5 @@
 # NS2-Final
-## COPY AT YOUR OWN RISK
+## Don't Copy!!!
 This NS-2 simulation is mainly for- 
 ```
       1. Wired 
